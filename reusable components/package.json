@@ -1,0 +1,16 @@
+{
+  "name": "reusable-components",
+  "version": "0.0.1",
+  "description": "salesforce reusable components",
+  "main": "index.js",
+  "scripts": {
+    "deploy-apex": "sfdx force:source:deploy -m ApexClass:MyApexClass",
+    "deploy-lwc": "sfdx force:source:deploy -p force-app/main/default/lwc/myComponent"
+  },
+  "dependencies": {
+    "salesforce-cli": "^1.0.0"
+  }
+  "keywords": [],
+  "author": "skynetduke",
+  "license": "MIT"
+}
