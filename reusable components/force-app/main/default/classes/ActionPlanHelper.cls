@@ -15,15 +15,21 @@ public without sharing class ActionPlanHelper {
         if (opportunityIds.isEmpty()) return;
 
         // Fetch related Action Plans
+        // Map of Opportunity Id as key and Action Plan Id as value
         Map<Id, Id> opportunityToActionPlan = new Map<Id, Id>();
         for (Action_Plan__c plan : [SELECT Id, Opportunity__c FROM Action_Plan__c WHERE Opportunity__c IN :opportunityIds]) {
-            opportunityToActionPlan.put(plan.Opportunity__c, plan.Id);
+            opportunityToActionPlan.put(plan.Opportunity__c,plan.Id);
         }
 
         // Fetch related Tasks and update due dates
         List<Task> tasksToUpdate = new List<Task>();
-        Map<Id, Id> actionPlanToOpportunity = opportunityToActionPlan.inverse(); // Reverse lookup
-
+        Map<Id, Id> actionPlanToOpportunity = = new Map<Id, Id>();
+        // To Reverse opportunity To ActionPlan mapping
+        for (Id oppId : opportunityToActionPlan.keySet()) {
+            Id actionPlanId = opportunityToActionPlan.get(oppId);
+            actionPlanToOpportunity.put(actionPlanId, oppId);
+        }
+        // SOQL query to fetch tasks related to Action Plans
         for (Task t : [SELECT Id, WhatId, Subject, ActivityDate FROM Task WHERE WhatId IN :opportunityToActionPlan.values()]) {
             if (actionPlanToOpportunity.containsKey(t.WhatId)) {
                 Id oppId = actionPlanToOpportunity.get(t.WhatId);
